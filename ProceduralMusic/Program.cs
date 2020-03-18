@@ -16,13 +16,15 @@ namespace Procedural_Music
     {
         static void Main(string[] args)
         {
-            var pattern = MelodyGenerator.ReturnParametricMelody(
+            /*var pattern = MelodyGenerator.ReturnParametricMelody(
                 DateTime.Now.Millisecond, ScaleIntervals.Major, "Natural Minor", NoteName.ASharp,
                 MelodyGenerator.TimeMood.Chill, 55, 2, new int[] { 2, 4 }
-                );
+                );*/
+
+            var pattern = MelodyGenerator.ReturnRandomParametricMelody(DateTime.Now.Millisecond * DateTime.Now.Second, 50);
 
             MidiFile midiFile = pattern.ToFile(TempoMap.Default);
-            midiFile.Write("test.mid", true, MidiFileFormat.SingleTrack);
+            midiFile.Write("out.mid", true, MidiFileFormat.SingleTrack);
             Console.ReadLine();
         }
     }
