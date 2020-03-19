@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Melanchall.DryWetMidi;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Composing;
 using Melanchall.DryWetMidi.Core;
@@ -54,7 +55,6 @@ namespace Procedural_Music
 
                 notes[i] = scale.GetStep(Math.Abs(lastStep));
             }
-
             //Construye la melodia
             for (int i = 0; i < notes.Length; i++)
             {
@@ -67,13 +67,14 @@ namespace Procedural_Music
             Console.WriteLine("Se creo una melodia en la escala de " + tonic.ToString() + " " + scaleName);
             return patternBuilder.Build();
         }
+
         /// <summary>
         /// Genera una melodia completamente aleatoria dada la seed, seteando proceduralmente parametros de una
         /// melodia parametrica
         /// </summary>
         /// <param name="seed">seed</param>
         /// <returns></returns>
-        public static Pattern ReturnRandomParametricMelody(int seed,int notesAmount)
+        public static Pattern ReturnRandomParametricMelody(int seed, int notesAmount)
         {
             Random random = new Random(seed);
             IEnumerable<Interval> intervalToUse = null;
@@ -118,7 +119,7 @@ namespace Procedural_Music
             int stepVariance = random.Next(1, 5);
             int octavesAmount = random.Next(1, 5);
             int[] octaves = new int[octavesAmount];
-            for(int i = 0; i < octavesAmount; i++)
+            for (int i = 0; i < octavesAmount; i++)
             {
                 octaves[i] = random.Next(2, 6);
             }
@@ -130,6 +131,7 @@ namespace Procedural_Music
             Console.WriteLine("Y " + octavesAmount + " niveles de octavas");
             return ReturnParametricMelody(seed, intervalToUse, scaleName, tonic, timeMood, notesAmount, stepVariance, octaves);
         }
+
         static MusicalTimeSpan GetTimeSpanFromMood(TimeMood mood, int rnd)
         {
             switch (mood)
@@ -168,7 +170,7 @@ namespace Procedural_Music
                     {
                         return MusicalTimeSpan.Sixteenth;
                     }
-                    else if(rnd < 60)
+                    else if (rnd < 60)
                     {
                         return MusicalTimeSpan.Quarter;
                     }
@@ -198,6 +200,26 @@ namespace Procedural_Music
             return MusicalTimeSpan.Whole;
         }
         public enum TimeMood { Progression, Dull, Chill, Complex, Dissonant }
+        public static readonly Interval[] MAJOR_TRIAD = { Interval.Four, Interval.Seven };
+        public static readonly Interval[] MINOR_TRIAD = { Interval.Three, Interval.Seven };
+        public static readonly Interval[] DIMINISHED_TRIAD = { Interval.Three, Interval.Six };
+        public static readonly Interval[] SUS4_TRIAD = { Interval.Five, Interval.Seven };
+        public static readonly Interval[] SUS2_TRIAD = { Interval.Two, Interval.Seven };
+        public static Pattern ChordProgression()
+        {
+            var majorChord = new[] { Interval.Four,Interval.Seven };
+            var minorChord = new[] { Interval.Three, Interval.Seven };
+            var patternBuilder = new PatternBuilder();
+            patternBuilder.ProgramChange(GeneralMidiProgram.AcousticGuitar1);
+            Melanchall.DryWetMidi.MusicTheory.Chord chord = 
+                new Melanchall.DryWetMidi.MusicTheory.Chord
+                (NoteName.C, new NoteName[]{ NoteName.E, NoteName.G });
+            patternBuilder.Chord(ChordUtilities.ResolveNotes(chord, Octave.Get(3)));
+            //patternBuilder.SetRootNote(Octave.Get(3).D);
+            patternBuilder.Chord(minorChord, Octave.Get(3).G);
+            //patternBuilder.Chord(chord);
+            return patternBuilder.Build();
+        }
         //Progression: Mitad wholes mitad Halfs
         //Dull: todas las notas en Quarter
         //Chill: mayoria en Eighth, poca probabilidad de Quarter
