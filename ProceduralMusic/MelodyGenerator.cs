@@ -10,7 +10,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.MusicTheory;
 using Melanchall.DryWetMidi.Standards;
-
+using ProceduralMusic;
 
 namespace Procedural_Music
 {
@@ -205,25 +205,21 @@ namespace Procedural_Music
         //Complex: mezcla entre Eight, Quarter y Sixt.
         //Dissonant: mezcla entre Quarter y Sixt, poca chance de Eight
         public enum TimeMood { Progression, Dull, Chill, Complex, Dissonant }
-        public static readonly Interval[] MAJOR_TRIAD = { Interval.Four, Interval.Seven };
-        public static readonly Interval[] MINOR_TRIAD = { Interval.Three, Interval.Seven };
-        public static readonly Interval[] DIMINISHED_TRIAD = { Interval.Three, Interval.Six };
-        public static readonly Interval[] SUS4_TRIAD = { Interval.Five, Interval.Seven };
-        public static readonly Interval[] SUS2_TRIAD = { Interval.Two, Interval.Seven };
-        public static Pattern ChordProgression()
+
+        public static Pattern ScaleChords()
         {
-            var majorChord = new[] { Interval.Four,Interval.Seven };
-            var minorChord = new[] { Interval.Three, Interval.Seven };
+            Console.WriteLine("Generando midi con los acordes de la escala:");
+            var chords = ExtraTheory.GenerateChordArray(ChordQuality.Minor, ScaleIntervals.Minor, NoteName.D);
+            Console.WriteLine(chords[0].GetNames().ToArray<string>()[0]);
+            Console.WriteLine("---------------");
             var patternBuilder = new PatternBuilder();
             patternBuilder.ProgramChange(GeneralMidiProgram.AcousticGuitar1);
-            Melanchall.DryWetMidi.MusicTheory.Chord chord = 
-                new Melanchall.DryWetMidi.MusicTheory.Chord
-                (NoteName.C, new NoteName[]{ NoteName.E, NoteName.G });
-            
-            patternBuilder.Chord(ChordUtilities.ResolveNotes(chord, Octave.Get(3)));
-            //patternBuilder.SetRootNote(Octave.Get(3).D);
-            patternBuilder.Chord(minorChord, Octave.Get(3).G);
-            //patternBuilder.Chord(chord);
+            for(int i = 0; i < chords.Length; i++)
+            {
+                patternBuilder.Chord(chords[i], Octave.Get(3));
+                Console.Write((ExtraTheory.ChordOrder)(i + 1)  + "- ");
+                Console.WriteLine(chords[i].GetNames().ToArray<string>()[0]);
+            }
             return patternBuilder.Build();
         }
     }

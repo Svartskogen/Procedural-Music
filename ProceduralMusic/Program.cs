@@ -23,12 +23,12 @@ namespace Procedural_Music
 
             //var pattern = MelodyGenerator.ReturnRandomParametricMelody(DateTime.Now.Millisecond * DateTime.Now.Second, 50);
 
-            RandomMelodyMenu();
-            /*var pattern = MelodyGenerator.DrumTest();
+            //RandomMelodyMenu();
+            var pattern = MelodyGenerator.ScaleChords();
             MidiFile midiFile = pattern.ToFile(TempoMap.Default);
             
             midiFile.Write("out.mid", true, MidiFileFormat.SingleTrack);
-            Console.ReadLine();*/
+            Console.ReadLine();
         }
 
 
