@@ -38,7 +38,7 @@ namespace Procedural_Music
         /// <param name="stepVariance">Variacion maxima entre nota y nota con respecto a la escala</param>
         /// <param name="octaves">Arreglo con octavas a usar</param>
         /// <returns></returns>
-        public static Pattern ReturnParametricMelody(int notesSeed, IEnumerable<Interval> scaleInterval,
+        public static Pattern ParametricStandaloneMelody(int notesSeed, IEnumerable<Interval> scaleInterval,
             string scaleName, NoteName tonic, TimeMood timeMood,
             int notesAmount, int stepVariance, int[] octaves)
         {
@@ -74,7 +74,7 @@ namespace Procedural_Music
         /// </summary>
         /// <param name="seed">seed</param>
         /// <returns></returns>
-        public static Pattern ReturnRandomParametricMelody(int seed, int notesAmount)
+        public static Pattern RandomParametricStandaloneMelody(int seed, int notesAmount)
         {
             Random random = new Random(seed);
             IEnumerable<Interval> intervalToUse = null;
@@ -129,7 +129,7 @@ namespace Procedural_Music
             Console.WriteLine("Con un estilo de tiempo: " + timeMood.ToString() + " y " + notesAmount + " notas");
             Console.WriteLine("Variacion entre notas dentro de la escala de +- " + stepVariance);
             Console.WriteLine("Y " + octavesAmount + " niveles de octavas");
-            return ReturnParametricMelody(seed, intervalToUse, scaleName, tonic, timeMood, notesAmount, stepVariance, octaves);
+            return ParametricStandaloneMelody(seed, intervalToUse, scaleName, tonic, timeMood, notesAmount, stepVariance, octaves);
         }
 
         static MusicalTimeSpan GetTimeSpanFromMood(TimeMood mood, int rnd)
@@ -199,6 +199,11 @@ namespace Procedural_Music
             }
             return MusicalTimeSpan.Whole;
         }
+        //Progression: Mitad wholes mitad Halfs
+        //Dull: todas las notas en Quarter
+        //Chill: mayoria en Eighth, poca probabilidad de Quarter
+        //Complex: mezcla entre Eight, Quarter y Sixt.
+        //Dissonant: mezcla entre Quarter y Sixt, poca chance de Eight
         public enum TimeMood { Progression, Dull, Chill, Complex, Dissonant }
         public static readonly Interval[] MAJOR_TRIAD = { Interval.Four, Interval.Seven };
         public static readonly Interval[] MINOR_TRIAD = { Interval.Three, Interval.Seven };
@@ -214,17 +219,13 @@ namespace Procedural_Music
             Melanchall.DryWetMidi.MusicTheory.Chord chord = 
                 new Melanchall.DryWetMidi.MusicTheory.Chord
                 (NoteName.C, new NoteName[]{ NoteName.E, NoteName.G });
+            
             patternBuilder.Chord(ChordUtilities.ResolveNotes(chord, Octave.Get(3)));
             //patternBuilder.SetRootNote(Octave.Get(3).D);
             patternBuilder.Chord(minorChord, Octave.Get(3).G);
             //patternBuilder.Chord(chord);
             return patternBuilder.Build();
         }
-        //Progression: Mitad wholes mitad Halfs
-        //Dull: todas las notas en Quarter
-        //Chill: mayoria en Eighth, poca probabilidad de Quarter
-        //Complex: mezcla entre Eight, Quarter y Sixt.
-        //Dissonant: mezcla entre Quarter y Sixt, poca chance de Eight
     }
 
 }

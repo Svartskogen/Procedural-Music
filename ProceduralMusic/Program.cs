@@ -24,7 +24,7 @@ namespace Procedural_Music
             //var pattern = MelodyGenerator.ReturnRandomParametricMelody(DateTime.Now.Millisecond * DateTime.Now.Second, 50);
 
             RandomMelodyMenu();
-            /*var pattern = MelodyGenerator.ChordProgression();
+            /*var pattern = MelodyGenerator.DrumTest();
             MidiFile midiFile = pattern.ToFile(TempoMap.Default);
             
             midiFile.Write("out.mid", true, MidiFileFormat.SingleTrack);
@@ -54,7 +54,7 @@ namespace Procedural_Music
                 {
                     Console.Clear();
                     Console.WriteLine("ingresa una seed y luego una cantidad de notas");
-                    pattern = MelodyGenerator.ReturnRandomParametricMelody(Convert.ToInt32(Console.ReadLine()), Convert.ToInt32(Console.ReadLine()));
+                    pattern = MelodyGenerator.RandomParametricStandaloneMelody(Convert.ToInt32(Console.ReadLine()), Convert.ToInt32(Console.ReadLine()));
                     break;
                 }
                 default:
@@ -101,8 +101,8 @@ namespace Procedural_Music
             }
 
             Console.WriteLine("Ingrese una tonica para la escala:");
-            Console.WriteLine("0: C\n 1:C#\n 3:D\n 4:D#\n 5:E\n 6:F\n 7:F#\n 8:G\n 9:G#\n 10:A\n 11:A#\n 12:B");
-            NoteName tonic = (NoteName)Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("0: C\n 1:C#\n 2:D\n 3:D#\n 4:E\n 5:F\n 6:F#\n 7:G\n 8:G#\n 9:A\n 10:A#\n 11:B");
+            NoteName tonic = (NoteName)Convert.ToInt32(Console.ReadLine()); 
 
             Console.WriteLine("Ingrese un modo de tiempo:");
             Console.WriteLine("0: Progression \n1:Dull \n2:Chill \n3:Complex \n4:Dissonant");
@@ -121,7 +121,7 @@ namespace Procedural_Music
             {
                 octaves[i] = Convert.ToInt32(Console.ReadLine());
             }
-            return MelodyGenerator.ReturnParametricMelody(seed, scaleIntervals, scaleName, tonic, timeMood, notesAmount, stepVariance, octaves);
+            return MelodyGenerator.ParametricStandaloneMelody(seed, scaleIntervals, scaleName, tonic, timeMood, notesAmount, stepVariance, octaves);
         }
     }
 }
