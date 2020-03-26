@@ -16,19 +16,14 @@ namespace Procedural_Music
 {
     static class MelodyGenerator
     {
-        /// <summary>
-        /// Genera una melodia independiente dados diversos parametros
+        /// <summary>Genera una melodia independiente dados diversos parametros
         /// <para>
-        /// La melodia se va a encontrar en escala, no va a prestar atencion a compases.
-        /// </para>
+        /// La melodia se va a encontrar en escala, no va a prestar atencion a compases.</para>
         /// <para>
-        /// Crea una cantidad dada de notas, usando TimeMood para su espaciado
-        /// </para>
+        /// Crea una cantidad dada de notas, usando TimeMood para su espaciado</para>
         /// <para>
         /// Tambien soporta una variable que indica que tanto puede saltar una nota a otra en la escala, 
-        /// asi como que octavas usar
-        /// </para>
-        /// </summary>
+        /// asi como que octavas usar</para></summary>
         /// <param name="notesSeed">Semilla para las notas</param>
         /// <param name="scaleInterval">Escala a usar para las notas</param>
         /// <param name="scaleName">Nombre de la escala para imprimir informacion</param>
@@ -132,6 +127,16 @@ namespace Procedural_Music
             return ParametricStandaloneMelody(seed, intervalToUse, scaleName, tonic, timeMood, notesAmount, stepVariance, octaves);
         }
 
+        /// <summary>
+        /// TimeMood es usado para definir un tipo de espaciado de notas, usado con GetTimeSpanFromMood()
+        /// <para>TimeMood no presta atencion a compases</para>
+        /// </summary>
+        //Progression: Mitad wholes mitad Halfs
+        //Dull: todas las notas en Quarter
+        //Chill: mayoria en Eighth, poca probabilidad de Quarter
+        //Complex: mezcla entre Eight, Quarter y Sixt.
+        //Dissonant: mezcla entre Quarter y Sixt, poca chance de Eight
+        public enum TimeMood { Progression, Dull, Chill, Complex, Dissonant }
         static MusicalTimeSpan GetTimeSpanFromMood(TimeMood mood, int rnd)
         {
             switch (mood)
@@ -199,12 +204,6 @@ namespace Procedural_Music
             }
             return MusicalTimeSpan.Whole;
         }
-        //Progression: Mitad wholes mitad Halfs
-        //Dull: todas las notas en Quarter
-        //Chill: mayoria en Eighth, poca probabilidad de Quarter
-        //Complex: mezcla entre Eight, Quarter y Sixt.
-        //Dissonant: mezcla entre Quarter y Sixt, poca chance de Eight
-        public enum TimeMood { Progression, Dull, Chill, Complex, Dissonant }
 
         public static Pattern ScaleChords()
         {
@@ -221,6 +220,68 @@ namespace Procedural_Music
                 Console.WriteLine(chords[i].GetNames().ToArray<string>()[0]);
             }
             return patternBuilder.Build();
+        }
+        /// <summary>
+        /// Genera una progresion de acordes independiente dados diversos parametros
+        /// <para>Incluye un parametro unico adicional: ChordProgressionType para la relacion entre acordes</para>
+        /// <para>Muy similar a ParametricStandaloneMelody en el caso de usar el ChordProgressionType = Random</para>
+        /// </summary>
+        /// <param name="chordsSeed">Semilla para los acordes</param>
+        /// <param name="scaleInterval">>Escala a usar para los acordes</param>
+        /// <param name="scaleQuality">Cualidad de la escala</param>
+        /// <param name="tonic">Nota base de la escala</param>
+        /// <param name="timeMood">TimeMood a usar para el tiempo de las notas</param>
+        /// <param name="progressionType">ProgressionType a usar para la relacion entre acordes</param>
+        /// <param name="chordsAmount">Solo relevante cuando ChordProgressionType NO es Popular</param>
+        /// <param name="stepVariance">Solo relevante cuando ChordProgressionType es Random</param>
+        /// <param name="octaves">Arreglo con octavas a usar</param>
+        public static Pattern ParametricStandaloneChords(int chordsSeed,IEnumerable<Interval> scaleInterval, ChordQuality scaleQuality,
+            NoteName tonic, TimeMood timeMood,ChordProgressionType progressionType,int chordsAmount, int stepVariance, int[] octaves)
+        {
+            Random random = new Random(chordsSeed);
+            var patternBuilder = new PatternBuilder();
+            patternBuilder.ProgramChange(GeneralMidiProgram.AcousticGuitar1);
+            var scaleChords = ExtraTheory.GenerateChordArray(scaleQuality, scaleInterval, tonic);
+            var chords = PopulateChordsArrayByProgressionType(scaleChords, progressionType, chordsAmount,stepVariance,random);
+
+            Console.WriteLine("Placing chords:");
+            //Construye la progresion
+            for(int i = 0; i < chords.Length; i++)
+            {
+                //patternBuilder.SetOctave(Octave.Get(octaves[random.Next(0, octaves.Length)]));
+                patternBuilder.SetNoteLength(GetTimeSpanFromMood(timeMood, random.Next(0, 101)));
+                patternBuilder.Chord(chords[i], Octave.Get(octaves[random.Next(0, octaves.Length)]));
+
+                //Debug:
+                Console.WriteLine(chords[i].GetNames().ToArray<string>()[0]);
+            }
+
+            Console.WriteLine("Se creo una progresion de acordes en la escala de: " + tonic.ToString() + " " + scaleQuality.ToString());
+            return patternBuilder.Build();
+        }
+        
+        //Random: Mismo metodo usado en ParametricMelodyGenerator
+        public enum ChordProgressionType { Random,Coherent,Popular}
+
+        static Melanchall.DryWetMidi.MusicTheory.Chord[] PopulateChordsArrayByProgressionType
+            (Melanchall.DryWetMidi.MusicTheory.Chord[] availableChords,ChordProgressionType progressionType,int chordsAmount,
+            int stepVariance, Random random)
+        {
+            Melanchall.DryWetMidi.MusicTheory.Chord[] chords = new Melanchall.DryWetMidi.MusicTheory.Chord[chordsAmount];
+            switch (progressionType)
+            {
+                case ChordProgressionType.Random:
+                {
+                    int lastStep = 0;
+                    for (int i = 0; i < chords.Length; i++)
+                    {
+                        lastStep += random.Next(-stepVariance, stepVariance);
+                        chords[i] = availableChords[Math.Abs(lastStep % availableChords.Length)];
+                    }
+                    return chords;
+                }
+            }
+            return null;
         }
     }
 

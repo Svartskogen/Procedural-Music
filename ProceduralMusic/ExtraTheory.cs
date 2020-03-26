@@ -63,6 +63,7 @@ namespace ProceduralMusic
             }
             return array;
         }
+        public enum ChordOrder { I = 1, II, III, IV, V, VI, VII };
         private static ChordQuality[] GetChordsFromScale(ChordQuality scale)
         {
             if(scale == ChordQuality.Minor)
@@ -74,6 +75,5 @@ namespace ProceduralMusic
                 return MajorChords;
             }
         }
-        public enum ChordOrder { I = 1, II, III, IV, V, VI, VII };
     }
 }

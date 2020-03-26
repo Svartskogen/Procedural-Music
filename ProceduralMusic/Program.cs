@@ -24,7 +24,7 @@ namespace Procedural_Music
             //var pattern = MelodyGenerator.ReturnRandomParametricMelody(DateTime.Now.Millisecond * DateTime.Now.Second, 50);
 
             //RandomMelodyMenu();
-            var pattern = MelodyGenerator.ScaleChords();
+            var pattern = MelodyGenerator.ParametricStandaloneChords(DateTime.Now.Millisecond, ScaleIntervals.Minor, ChordQuality.Minor, NoteName.A, MelodyGenerator.TimeMood.Dull, MelodyGenerator.ChordProgressionType.Random, 20, 2, new int[]{3, 2, 4});
             MidiFile midiFile = pattern.ToFile(TempoMap.Default);
             
             midiFile.Write("out.mid", true, MidiFileFormat.SingleTrack);
@@ -32,7 +32,7 @@ namespace Procedural_Music
         }
 
 
-        private static void RandomMelodyMenu()
+        private static void ParametricMelodyMenu()
         {
             Pattern pattern = null;
             Console.WriteLine("Welcome to the random Melody Generator");
@@ -69,7 +69,7 @@ namespace Procedural_Music
             midiFile.Write("output.mid", true, MidiFileFormat.SingleTrack);
             Console.ReadLine();
         }
-        private static Pattern InputParametricMelody()
+        static Pattern InputParametricMelody()
         {
             Console.WriteLine("Ingrese una seed para las notas:");
             int seed = Convert.ToInt32(Console.ReadLine());
@@ -122,6 +122,10 @@ namespace Procedural_Music
                 octaves[i] = Convert.ToInt32(Console.ReadLine());
             }
             return MelodyGenerator.ParametricStandaloneMelody(seed, scaleIntervals, scaleName, tonic, timeMood, notesAmount, stepVariance, octaves);
+        }
+        private static void ParametricProgressionMenu()
+        {
+
         }
     }
 }
