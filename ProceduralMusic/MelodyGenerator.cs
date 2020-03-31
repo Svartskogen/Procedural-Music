@@ -205,10 +205,10 @@ namespace Procedural_Music
             return MusicalTimeSpan.Whole;
         }
 
-        public static Pattern ScaleChords()
+        public static Pattern ScaleChords(ChordQuality chordQuality, IEnumerable<Interval> scaleInterval, NoteName tonic)
         {
             Console.WriteLine("Generando midi con los acordes de la escala:");
-            var chords = ExtraTheory.GenerateChordArray(ChordQuality.Minor, ScaleIntervals.Minor, NoteName.D);
+            var chords = ExtraTheory.GenerateChordArray(chordQuality, scaleInterval, tonic);
             Console.WriteLine(chords[0].GetNames().ToArray<string>()[0]);
             Console.WriteLine("---------------");
             var patternBuilder = new PatternBuilder();
@@ -260,6 +260,10 @@ namespace Procedural_Music
             return patternBuilder.Build();
         }
         
+        public static Pattern RandomParametricStandaloneChords(int seed, int notesAmount)
+        {
+            return null;
+        }
         //Random: Mismo metodo usado en ParametricMelodyGenerator
         public enum ChordProgressionType { Random,Coherent,Popular}
 
