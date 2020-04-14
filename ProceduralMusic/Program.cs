@@ -14,6 +14,7 @@ namespace Procedural_Music
 {
     class Program
     {
+        const string VERSION = "1.0.1";
         static void Main(string[] args)
         {
             /*var pattern = MelodyGenerator.ReturnParametricMelody(
@@ -25,6 +26,7 @@ namespace Procedural_Music
             while (true)
             {
                 Console.Clear();
+                Console.WriteLine(VERSION);
                 ParametricTracksMenu();
                 Console.WriteLine("Press enter to reload the generator");
                 Console.ReadLine();
@@ -168,7 +170,7 @@ namespace Procedural_Music
                 case "2":
                 {
                     Console.Clear();
-                    Console.WriteLine("ingresa una seed y luego una cantidad de notas");
+                    Console.WriteLine("ingresa una seed y luego una cantidad de acordes");
                     pattern = MelodyGenerator.RandomParametricStandaloneChords(Convert.ToInt32(Console.ReadLine()), Convert.ToInt32(Console.ReadLine()));
                     break;
                 }
@@ -191,10 +193,10 @@ namespace Procedural_Music
         }
         static Pattern InputParametricProgression()
         {
-            Console.WriteLine("Ingrese una seed para las notas:");
+            Console.WriteLine("Ingrese una seed para los acordes:");
             int seed = Convert.ToInt32(Console.ReadLine());
 
-            Console.WriteLine("Ingrese una escala para las notas:");
+            Console.WriteLine("Ingrese una escala para los acordes:");
             Console.WriteLine("-1: Major");
             Console.WriteLine("-2: Natural Minor");
             IEnumerable<Interval> scaleIntervals = null;

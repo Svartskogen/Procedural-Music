@@ -284,6 +284,121 @@ namespace Procedural_Music
                     }
                     return chords;
                 }
+                case ChordProgressionType.Coherent:
+                {
+                    ExtraTheory.ChordOrder lastChord = ExtraTheory.ChordOrder.I;
+                    int chordsSinceI = 0;
+                    chords[0] = availableChords[0];
+                    for (int i = 1; i < chords.Length; i++)
+                    {
+                        switch (lastChord)
+                        {
+                            case ExtraTheory.ChordOrder.I:
+                            {
+                                lastChord = (ExtraTheory.ChordOrder)random.Next(1,8);
+                                break;
+                            }
+                            case ExtraTheory.ChordOrder.II:
+                            {
+                                if (chordsSinceI >= 4)
+                                {
+                                    lastChord = ExtraTheory.ChordOrder.V;
+                                }
+                                else
+                                {
+                                    if (random.Next(0, 2) == 0)
+                                    {
+                                        lastChord = ExtraTheory.ChordOrder.V;
+                                    }
+                                    else
+                                    {
+                                        lastChord = ExtraTheory.ChordOrder.III;
+                                    }
+                                }
+                                break;
+                            }
+                            case ExtraTheory.ChordOrder.III:
+                            {
+                                if (random.Next(0, 2) == 0)
+                                {
+                                    lastChord = ExtraTheory.ChordOrder.VI;
+                                }
+                                else
+                                {
+                                    lastChord = ExtraTheory.ChordOrder.IV;
+                                }
+                                break;
+                            }
+                            case ExtraTheory.ChordOrder.IV:
+                            {
+                                if (random.Next(0, 3) == 0)
+                                {
+                                    lastChord = ExtraTheory.ChordOrder.II;
+                                }
+                                else
+                                {
+                                    lastChord = ExtraTheory.ChordOrder.V;
+                                }
+                                break;
+                            }
+                            case ExtraTheory.ChordOrder.V:
+                            {
+                                if(chordsSinceI >= 5)
+                                {
+                                    lastChord = ExtraTheory.ChordOrder.I;
+                                }
+                                else
+                                {
+                                    if (random.Next(0, 2) == 0)
+                                    {
+                                        lastChord = ExtraTheory.ChordOrder.VI;
+                                    }
+                                    else
+                                    {
+                                        lastChord = ExtraTheory.ChordOrder.III;
+                                    }
+                                }
+                                break;
+                            }
+                            case ExtraTheory.ChordOrder.VI:
+                            {
+                                if (random.Next(0, 2) == 0)
+                                {
+                                    lastChord = ExtraTheory.ChordOrder.IV;
+                                }
+                                else
+                                {
+                                    lastChord = ExtraTheory.ChordOrder.II;
+                                }
+                                break;
+                            }
+                            case ExtraTheory.ChordOrder.VII:
+                            {
+                                if (random.Next(0, 2) == 0)
+                                {
+                                    lastChord = ExtraTheory.ChordOrder.VI;
+                                }
+                                else
+                                {
+                                    lastChord = ExtraTheory.ChordOrder.I;
+                                }
+                                break;
+                            }
+                        }
+
+                        if(lastChord == ExtraTheory.ChordOrder.I)
+                        {
+                            chordsSinceI = 0;
+                        }
+                        else
+                        {
+                            chordsSinceI++;
+                        }
+
+                        chords[i] = availableChords[(int)lastChord-1];
+                    }
+                    return chords;
+                }
             }
             return null;
         }
