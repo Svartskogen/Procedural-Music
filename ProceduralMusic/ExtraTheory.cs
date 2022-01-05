@@ -15,11 +15,13 @@ namespace ProceduralMusic
 {
     public static class ExtraTheory
     {
-        //Triadas para generar acordes de la forma:
-        //MusicTheory.Chord chord =
-        //new MusicTheory.Chord(NoteName.Transpose(triad[0]),
-        //NoteName.Transpose(triad[1]),
-        //NoteName.Transpose(triad[2]));
+        /// <summary>
+        /// Triads used to generate chords with the following form:
+        /// MusicTheory.Chord chord =
+        /// new MusicTheory.Chord(NoteName.Transpose(triad[0]),
+        /// NoteName.Transpose(triad[1]),
+        /// NoteName.Transpose(triad[2]));
+        /// </summary>
         public static readonly Interval[] MAJOR_TRIAD = { Interval.Four, Interval.Seven };
         public static readonly Interval[] AUGMENTED_TRIAD = { Interval.Four, Interval.Eight };
         public static readonly Interval[] MINOR_TRIAD = { Interval.Three, Interval.Seven };
@@ -27,7 +29,7 @@ namespace ProceduralMusic
         public static readonly Interval[] SUS4_TRIAD = { Interval.Five, Interval.Seven };
         public static readonly Interval[] SUS2_TRIAD = { Interval.Two, Interval.Seven };
 
-        //Usados para crear el arreglo de acordes de cierta escala
+        //Used to create the chord array of a certain scale
         public static readonly ChordQuality[] MajorChords ={ChordQuality.Major,ChordQuality.Minor,ChordQuality.Minor,ChordQuality.Major,
                                                             ChordQuality.Major,ChordQuality.Minor,ChordQuality.Diminished};
         public static readonly ChordQuality[] NaturalMinorChords ={ChordQuality.Minor,ChordQuality.Diminished,ChordQuality.Major,
@@ -49,7 +51,9 @@ namespace ProceduralMusic
             return null;
         }
 
-        //Por ahora voy a usar solo la escala mayor y menor por que no se que pasa con los acordes en escalas mas complejas
+        /// <summary>
+        /// Only supports the Major and Minor scale so far
+        /// </summary>
         public static Melanchall.DryWetMidi.MusicTheory.Chord[] GenerateChordArray(ChordQuality scaleQuality, IEnumerable<Interval> scaleInterval, NoteName tonic)
         {
             Melanchall.DryWetMidi.MusicTheory.Chord[] array = new Melanchall.DryWetMidi.MusicTheory.Chord[7];
