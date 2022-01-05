@@ -16,23 +16,24 @@ namespace Procedural_Music
 {
     static class MelodyGenerator
     {
-        /// <summary>Genera una melodia independiente dados diversos parametros
+        /// <summary>
+        /// Generates an independent melody given various parameters
         /// <para>
-        /// La melodia se va a encontrar en escala, no va a prestar atencion a compases.</para>
+        /// The melody will be in a given scale, it will not take into account measures</para>
         /// <para>
-        /// Crea una cantidad dada de notas, usando TimeMood para su espaciado</para>
+        /// Creates a given amount of notes, and uses a TimeMood to time them</para>
         /// <para>
-        /// Tambien soporta una variable que indica que tanto puede saltar una nota a otra en la escala, 
-        /// asi como que octavas usar</para></summary>
-        /// <param name="notesSeed">Semilla para las notas</param>
-        /// <param name="scaleInterval">Escala a usar para las notas</param>
-        /// <param name="scaleName">Nombre de la escala para imprimir informacion</param>
-        /// <param name="tonic">Nota base de la escala</param>
-        /// <param name="timeMood">TimeMood a usar para el tiempo de las notas</param>
-        /// <param name="notesAmount">Cantidad de notas a generar</param>
-        /// <param name="stepVariance">Variacion maxima entre nota y nota con respecto a la escala</param>
-        /// <param name="octaves">Arreglo con octavas a usar</param>
-        /// <returns></returns>
+        /// Also supports a variabla that limits how much a note can jump from the previous one inside the scale, <paramref name="stepVariance"/>, and also limits notes to a
+        /// given octaves array.</para>
+        /// </summary>
+        /// <param name="notesSeed">Seed for the notes</param>
+        /// <param name="scaleInterval">Scale to be used for the notes</param>
+        /// <param name="scaleName">Scale name, used for debugging</param>
+        /// <param name="tonic">Base note for the scale</param>
+        /// <param name="timeMood">TimeMood preset for notes timing</param>
+        /// <param name="notesAmount">Amount of notes to generate</param>
+        /// <param name="stepVariance">Max variation between a note and the next one</param>
+        /// <param name="octaves">Set of octaves to use</param>
         public static Pattern ParametricStandaloneMelody(int notesSeed, IEnumerable<Interval> scaleInterval,
             string scaleName, NoteName tonic, TimeMood timeMood,
             int notesAmount, int stepVariance, int[] octaves)
@@ -50,7 +51,7 @@ namespace Procedural_Music
 
                 notes[i] = scale.GetStep(Math.Abs(lastStep));
             }
-            //Construye la melodia
+            //Builds the melody
             for (int i = 0; i < notes.Length; i++)
             {
                 patternBuilder.SetOctave(Octave.Get(octaves[random.Next(0, octaves.Length)]));
@@ -64,11 +65,8 @@ namespace Procedural_Music
         }
 
         /// <summary>
-        /// Genera una melodia completamente aleatoria dada la seed, seteando proceduralmente parametros de una
-        /// melodia parametrica
+        /// Generates a completely random melody given a seed, setting procedurally its parameters
         /// </summary>
-        /// <param name="seed">seed</param>
-        /// <returns></returns>
         public static Pattern RandomParametricStandaloneMelody(int seed, int notesAmount)
         {
             Random random = new Random(seed);
@@ -128,17 +126,20 @@ namespace Procedural_Music
         }
 
         /// <summary>
-        /// TimeMood es usado para definir un tipo de espaciado de notas, usado con GetTimeSpanFromMood()
-        /// <para>TimeMood no presta atencion a compases</para>
+        /// TimeMood is used to define a patter to time notes, used with <see cref="GetTimeSpanFromMood(TimeMood, int)"/>
+        /// <para>TimeMood does not take into account musical measures</para>
+        /// <list type="bullet">
+        /// <item><term>Progression</term> half Wholes, half Halfs notes</item>
+        /// <item><term>Dull</term> All Quarter notes</item>
+        /// <item><term>Chill</term> Mostly Eighths, small chance of Quarters</item>
+        /// <item><term>Complex</term> Mix between Eighths, Quarters and Sixts</item>
+        /// <item><term>Dissonant</term> Mix between Quarters and Sixts, small chance of Eighths</item>
+        /// </list>
         /// </summary>
-        //Progression: Mitad wholes mitad Halfs
-        //Dull: todas las notas en Quarter
-        //Chill: mayoria en Eighth, poca probabilidad de Quarter
-        //Complex: mezcla entre Eight, Quarter y Sixt.
-        //Dissonant: mezcla entre Quarter y Sixt, poca chance de Eight
         public enum TimeMood { Progression, Dull, Chill, Complex, Dissonant }
         static MusicalTimeSpan GetTimeSpanFromMood(TimeMood mood, int rnd)
         {
+            rnd = rnd > 100 ? 100 : rnd; //clamp
             switch (mood)
             {
                 case TimeMood.Progression:
@@ -222,19 +223,19 @@ namespace Procedural_Music
             return patternBuilder.Build();
         }
         /// <summary>
-        /// Genera una progresion de acordes independiente dados diversos parametros
-        /// <para>Incluye un parametro unico adicional: ChordProgressionType para la relacion entre acordes</para>
-        /// <para>Muy similar a ParametricStandaloneMelody en el caso de usar el ChordProgressionType = Random</para>
+        /// Generates an independent chord progression given various parameters
+        /// <para> Includes an unique aditional parameter: ChordProgressionType, to determine the relation between chords</para>
+        /// <para>Very similar to ParametricStandaloneMelody in the case of using ChordProgressionType = Random</para>
         /// </summary>
-        /// <param name="chordsSeed">Semilla para los acordes</param>
-        /// <param name="scaleInterval">>Escala a usar para los acordes</param>
-        /// <param name="scaleQuality">Cualidad de la escala</param>
-        /// <param name="tonic">Nota base de la escala</param>
-        /// <param name="timeMood">TimeMood a usar para el tiempo de las notas</param>
-        /// <param name="progressionType">ProgressionType a usar para la relacion entre acordes</param>
-        /// <param name="chordsAmount">Solo relevante cuando ChordProgressionType NO es Popular</param>
-        /// <param name="stepVariance">Solo relevante cuando ChordProgressionType es Random</param>
-        /// <param name="octaves">Arreglo con octavas a usar</param>
+        /// <param name="chordsSeed">Seed for the chords</param>
+        /// <param name="scaleInterval">Scale to be used for the chords</param>
+        /// <param name="scaleQuality">Scale Quality</param>
+        /// <param name="tonic">Base note for the scale</param>
+        /// <param name="timeMood">TimeMood preset for chords timing</param>
+        /// <param name="progressionType">Determines the relation between chords</param>
+        /// <param name="chordsAmount">Only when ChordProgressionType is NOT Popular</param>
+        /// <param name="stepVariance">Only relevant when ChordProgressionType is Random</param>
+        /// <param name="octaves">Set of octaves to use</param>
         public static Pattern ParametricStandaloneChords(int chordsSeed,IEnumerable<Interval> scaleInterval, ChordQuality scaleQuality,
             NoteName tonic, TimeMood timeMood,ChordProgressionType progressionType,int chordsAmount, int stepVariance, int[] octaves)
         {
@@ -245,10 +246,9 @@ namespace Procedural_Music
             var chords = PopulateChordsArrayByProgressionType(scaleChords, progressionType, chordsAmount,stepVariance,random);
 
             Console.WriteLine("Placing chords:");
-            //Construye la progresion
+            //Builds the progression
             for(int i = 0; i < chords.Length; i++)
             {
-                //patternBuilder.SetOctave(Octave.Get(octaves[random.Next(0, octaves.Length)]));
                 patternBuilder.SetNoteLength(GetTimeSpanFromMood(timeMood, random.Next(0, 101)));
                 patternBuilder.Chord(chords[i], Octave.Get(octaves[random.Next(0, octaves.Length)]));
 
@@ -262,10 +262,10 @@ namespace Procedural_Music
         
         public static Pattern RandomParametricStandaloneChords(int seed, int notesAmount)
         {
-            return null;
+            throw new NotImplementedException();
         }
-        //Random: Mismo metodo usado en ParametricMelodyGenerator
-        public enum ChordProgressionType { Random,Coherent,Popular}
+        //Random: Same method used in ParametricMelodyGenerator
+        public enum ChordProgressionType { Random, Coherent, Popular}
 
         static Melanchall.DryWetMidi.MusicTheory.Chord[] PopulateChordsArrayByProgressionType
             (Melanchall.DryWetMidi.MusicTheory.Chord[] availableChords,ChordProgressionType progressionType,int chordsAmount,
@@ -398,6 +398,10 @@ namespace Procedural_Music
                         chords[i] = availableChords[(int)lastChord-1];
                     }
                     return chords;
+                }
+                case ChordProgressionType.Popular:
+                {
+                    throw new NotImplementedException();
                 }
             }
             return null;

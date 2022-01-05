@@ -17,12 +17,6 @@ namespace Procedural_Music
         const string VERSION = "1.0.1";
         static void Main(string[] args)
         {
-            /*var pattern = MelodyGenerator.ReturnParametricMelody(
-                DateTime.Now.Millisecond, ScaleIntervals.Major, "Natural Minor", NoteName.ASharp,
-                MelodyGenerator.TimeMood.Chill, 55, 2, new int[] { 2, 4 }
-                );*/
-
-            //var pattern = MelodyGenerator.ReturnRandomParametricMelody(DateTime.Now.Millisecond * DateTime.Now.Second, 50);
             while (true)
             {
                 Console.Clear();
@@ -31,19 +25,14 @@ namespace Procedural_Music
                 Console.WriteLine("Press enter to reload the generator");
                 Console.ReadLine();
             }
-            /*var pattern = MelodyGenerator.ParametricStandaloneChords(DateTime.Now.Millisecond, ScaleIntervals.Minor, ChordQuality.Minor, NoteName.A, MelodyGenerator.TimeMood.Dull, MelodyGenerator.ChordProgressionType.Random, 20, 2, new int[]{3, 2, 4});
-            MidiFile midiFile = pattern.ToFile(TempoMap.Default);
-            
-            midiFile.Write("out.mid", true, MidiFileFormat.SingleTrack);
-            Console.ReadLine();*/
         }
 
         private static void ParametricTracksMenu()
         {
             Console.WriteLine("Welcome to the parametric musical tracks generator");
-            Console.WriteLine("Chose a track type:");
-            Console.WriteLine("1 -Melody (notes)");
-            Console.WriteLine("2 -Progression (chords)");
+            Console.WriteLine("Choose a track type:");
+            Console.WriteLine("1 - Melody (notes)");
+            Console.WriteLine("2 - Progression (chords)");
             switch (Console.ReadLine())
             {
                 case "1":
@@ -61,10 +50,10 @@ namespace Procedural_Music
         private static void ParametricMelodyMenu()
         {
             Pattern pattern = null;
-            Console.WriteLine("Welcome to the random Melody Generator");
-            Console.WriteLine("Chose a melody generation method:");
-            Console.WriteLine("1 -parametric");
-            Console.WriteLine("2 -seeded");
+            Console.WriteLine("Random Melody Generator");
+            Console.WriteLine("Choose a melody generation method:");
+            Console.WriteLine("1 - parametric");
+            Console.WriteLine("2 - seeded");
             switch (Console.ReadLine().ToLower())
             {
                 case "1":
@@ -79,7 +68,7 @@ namespace Procedural_Music
                 case "2":
                 {
                     Console.Clear();
-                    Console.WriteLine("ingresa una seed y luego una cantidad de notas");
+                    Console.WriteLine("enter a seed and an amount of notes");
                     pattern = MelodyGenerator.RandomParametricStandaloneMelody(Convert.ToInt32(Console.ReadLine()), Convert.ToInt32(Console.ReadLine()));
                     break;
                 }
@@ -89,19 +78,19 @@ namespace Procedural_Music
                     return;
                 }
             }
-            Console.WriteLine("Creando archivo output.mid");
+            Console.WriteLine("Saving composition to file output.mid");
             MidiFile midiFile = pattern.ToFile(TempoMap.Default);
 
             midiFile.Write("output.mid", true, MidiFileFormat.SingleTrack);
         }
         static Pattern InputParametricMelody()
         {
-            Console.WriteLine("Ingrese una seed para las notas:");
+            Console.WriteLine("Enter a random numeric seed for the notes:");
             int seed = Convert.ToInt32(Console.ReadLine());
 
-            Console.WriteLine("Ingrese una escala para las notas:");
-            Console.WriteLine("-1: Major");
-            Console.WriteLine("-2: Natural Minor");
+            Console.WriteLine("Enter a scale for the notes:");
+            Console.WriteLine("1: Major");
+            Console.WriteLine("2: Natural Minor");
             IEnumerable<Interval> scaleIntervals = null;
             string scaleName = null;
             switch (Console.ReadLine().ToLower())
@@ -125,23 +114,23 @@ namespace Procedural_Music
                 }
             }
 
-            Console.WriteLine("Ingrese una tonica para la escala:");
+            Console.WriteLine("Enter a tonic for the scale:");
             Console.WriteLine("0: C\n 1:C#\n 2:D\n 3:D#\n 4:E\n 5:F\n 6:F#\n 7:G\n 8:G#\n 9:A\n 10:A#\n 11:B");
             NoteName tonic = (NoteName)Convert.ToInt32(Console.ReadLine()); 
 
-            Console.WriteLine("Ingrese un modo de tiempo:");
+            Console.WriteLine("Enter a time mood preset:");
             Console.WriteLine("0:Progression \n1:Dull \n2:Chill \n3:Complex \n4:Dissonant");
             MelodyGenerator.TimeMood timeMood = (MelodyGenerator.TimeMood)Convert.ToInt32(Console.ReadLine());
 
-            Console.WriteLine("Ingrese la cantidad de notas que quiere generar:");
+            Console.WriteLine("Enter the amount of notes you want to generate:");
             int notesAmount = Convert.ToInt32(Console.ReadLine());
 
-            Console.WriteLine("Ingrese la variacion maxima entre notas con respecto a la escala:");
+            Console.WriteLine("Enter the maximum variation between the previous note and the next relative to the scale:");
             int stepVariance = Convert.ToInt32(Console.ReadLine());
 
-            Console.WriteLine("Ingrese la cantidad de octavas que desea usar:");
+            Console.WriteLine("Enter the amount of octaves you wish to use:");
             int[] octaves = new int[Convert.ToInt32(Console.ReadLine())];
-            Console.WriteLine("Ingrese las octavas:");
+            Console.WriteLine("Enter each octave value:");
             for(int i = 0; i < octaves.Length; i++)
             {
                 octaves[i] = Convert.ToInt32(Console.ReadLine());
@@ -151,11 +140,11 @@ namespace Procedural_Music
         private static void ParametricProgressionMenu()
         {
             Pattern pattern = null;
-            Console.WriteLine("Welcome to the random Chord Progression Generator");
-            Console.WriteLine("Chose a progression generation method:");
-            Console.WriteLine("1 -parametric");
-            Console.WriteLine("2 -seeded");
-            Console.WriteLine("3 -scale chords");
+            Console.WriteLine("Random Chord Progression Generator");
+            Console.WriteLine("Choose a progression generation method:");
+            Console.WriteLine("1 - parametric");
+            Console.WriteLine("2 - seeded");
+            Console.WriteLine("3 - scale chords");
             switch (Console.ReadLine().ToLower())
             {
                 case "1":
@@ -170,7 +159,7 @@ namespace Procedural_Music
                 case "2":
                 {
                     Console.Clear();
-                    Console.WriteLine("ingresa una seed y luego una cantidad de acordes");
+                    Console.WriteLine("enter a seed and an amount of chords");
                     pattern = MelodyGenerator.RandomParametricStandaloneChords(Convert.ToInt32(Console.ReadLine()), Convert.ToInt32(Console.ReadLine()));
                     break;
                 }
@@ -186,19 +175,19 @@ namespace Procedural_Music
                     return;
                 }
             }
-            Console.WriteLine("Creando archivo output.mid");
+            Console.WriteLine("Saving composition to file output.mid");
             MidiFile midiFile = pattern.ToFile(TempoMap.Default);
 
             midiFile.Write("output.mid", true, MidiFileFormat.SingleTrack);
         }
         static Pattern InputParametricProgression()
         {
-            Console.WriteLine("Ingrese una seed para los acordes:");
+            Console.WriteLine("Enter a random numeric seed for the chords:");
             int seed = Convert.ToInt32(Console.ReadLine());
 
-            Console.WriteLine("Ingrese una escala para los acordes:");
-            Console.WriteLine("-1: Major");
-            Console.WriteLine("-2: Natural Minor");
+            Console.WriteLine("Enter a scale for the chords:");
+            Console.WriteLine("1: Major");
+            Console.WriteLine("2: Natural Minor");
             IEnumerable<Interval> scaleIntervals = null;
             ChordQuality chordQuality;
             switch (Console.ReadLine().ToLower())
@@ -222,28 +211,28 @@ namespace Procedural_Music
                 }
             }
 
-            Console.WriteLine("Ingrese una tonica para la escala:");
+            Console.WriteLine("Enter a tonic for the scale:");
             Console.WriteLine("0:C\n 1:C#\n 2:D\n 3:D#\n 4:E\n 5:F\n 6:F#\n 7:G\n 8:G#\n 9:A\n 10:A#\n 11:B");
             NoteName tonic = (NoteName)Convert.ToInt32(Console.ReadLine());
 
-            Console.WriteLine("Ingrese un modo de tiempo:");
+            Console.WriteLine("Enter a time mood preset:");
             Console.WriteLine("0:Progression \n1:Dull \n2:Chill \n3:Complex \n4:Dissonant");
             MelodyGenerator.TimeMood timeMood = (MelodyGenerator.TimeMood)Convert.ToInt32(Console.ReadLine());
 
-            Console.WriteLine("Ingrese un tipo de progresion:");
+            Console.WriteLine("Enter the progression type");
             Console.WriteLine("0:Random \n1:Coherent \n2:Popular");
             MelodyGenerator.ChordProgressionType progressionType = (MelodyGenerator.ChordProgressionType)Convert.ToInt32(Console.ReadLine());
 
-            Console.WriteLine("Ingrese la cantidad de acordes que quiere generar:");
+            Console.WriteLine("Enter the amount of chords you want to generate:");
             int notesAmount = Convert.ToInt32(Console.ReadLine());
 
-            Console.WriteLine("Ingrese la variacion maxima entre acordes con respecto a la escala:");
-            Console.WriteLine("Solo util para tipo de progresion Random");
+            Console.WriteLine("Enter the maximum variation between the previous chord and the next relative to the scale:");
+            Console.WriteLine("Only used by the Random progression type");
             int stepVariance = Convert.ToInt32(Console.ReadLine());
 
-            Console.WriteLine("Ingrese la cantidad de octavas que desea usar:");
+            Console.WriteLine("Enter the amount of octaves you wish to use:");
             int[] octaves = new int[Convert.ToInt32(Console.ReadLine())];
-            Console.WriteLine("Ingrese las octavas:");
+            Console.WriteLine("Enter each octave value:");
             for (int i = 0; i < octaves.Length; i++)
             {
                 octaves[i] = Convert.ToInt32(Console.ReadLine());
@@ -252,9 +241,9 @@ namespace Procedural_Music
         }
         static Pattern InputScaleChords()
         {
-            Console.WriteLine("Ingrese una escala para las notas:");
-            Console.WriteLine("-1: Major");
-            Console.WriteLine("-2: Natural Minor");
+            Console.WriteLine("Enter a scale for the notes:");
+            Console.WriteLine("1: Major");
+            Console.WriteLine("2: Natural Minor");
             IEnumerable<Interval> scaleIntervals = null;
             ChordQuality chordQuality;
             switch (Console.ReadLine().ToLower())
@@ -278,7 +267,7 @@ namespace Procedural_Music
                 }
             }
 
-            Console.WriteLine("Ingrese una tonica para la escala:");
+            Console.WriteLine("Enter a tonic for the scale:");
             Console.WriteLine("0:C\n 1:C#\n 2:D\n 3:D#\n 4:E\n 5:F\n 6:F#\n 7:G\n 8:G#\n 9:A\n 10:A#\n 11:B");
             NoteName tonic = (NoteName)Convert.ToInt32(Console.ReadLine());
             return MelodyGenerator.ScaleChords(chordQuality,scaleIntervals,tonic);
