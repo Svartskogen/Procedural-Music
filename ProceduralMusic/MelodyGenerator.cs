@@ -60,7 +60,7 @@ namespace Procedural_Music
             }
 
             //Imprime info en la consola y devuelve
-            Console.WriteLine("Se creo una melodia en la escala de " + tonic.ToString() + " " + scaleName);
+            Console.WriteLine("Created melody in the scale of " + tonic.ToString() + " " + scaleName);
             return patternBuilder.Build();
         }
 
@@ -117,11 +117,11 @@ namespace Procedural_Music
                 octaves[i] = random.Next(2, 6);
             }
 
-            Console.WriteLine("Se genero una melodia con semilla: " + seed);
-            Console.WriteLine("En la escala de " + tonic.ToString() + " " + scaleName);
-            Console.WriteLine("Con un estilo de tiempo: " + timeMood.ToString() + " y " + notesAmount + " notas");
-            Console.WriteLine("Variacion entre notas dentro de la escala de +- " + stepVariance);
-            Console.WriteLine("Y " + octavesAmount + " niveles de octavas");
+            Console.WriteLine("Generated melody with seed: " + seed);
+            Console.WriteLine("In the " + tonic.ToString() + " " + scaleName + " scale");
+            Console.WriteLine("With TimeMood: " + timeMood.ToString() + " and " + notesAmount + " notes");
+            Console.WriteLine("Notes variation of +- " + stepVariance);
+            Console.WriteLine("And " + octavesAmount + " octave levels");
             return ParametricStandaloneMelody(seed, intervalToUse, scaleName, tonic, timeMood, notesAmount, stepVariance, octaves);
         }
 
@@ -208,7 +208,7 @@ namespace Procedural_Music
 
         public static Pattern ScaleChords(ChordQuality chordQuality, IEnumerable<Interval> scaleInterval, NoteName tonic)
         {
-            Console.WriteLine("Generando midi con los acordes de la escala:");
+            Console.WriteLine("Generating midi file with chords in the scale: ");
             var chords = ExtraTheory.GenerateChordArray(chordQuality, scaleInterval, tonic);
             Console.WriteLine(chords[0].GetNames().ToArray<string>()[0]);
             Console.WriteLine("---------------");
@@ -256,7 +256,7 @@ namespace Procedural_Music
                 Console.WriteLine(chords[i].GetNames().ToArray<string>()[0]);
             }
 
-            Console.WriteLine("Se creo una progresion de acordes en la escala de: " + tonic.ToString() + " " + scaleQuality.ToString());
+            Console.WriteLine("Created a chord progression in the scale of: " + tonic.ToString() + " " + scaleQuality.ToString());
             return patternBuilder.Build();
         }
         
